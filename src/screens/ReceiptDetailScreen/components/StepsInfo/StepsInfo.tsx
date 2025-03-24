@@ -1,42 +1,25 @@
 import { Text, View, StyleSheet } from 'react-native';
 
-export default function StepsInfo() {
+type StepsInfoProps = {
+  steps: string[];
+};
 
-
-
+export default function StepsInfo({ steps }: StepsInfoProps) {
   return(
     <View>
       <Text style={styles.stepsTitleText}>
         Приготовление
       </Text>
-      <View style={styles.stepsContainer}>
-        <Text style={styles.stepNumber}>
-          Шаг 1
-        </Text>
-        <Text style={styles.stepText}>
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-        </Text>
-      </View>
-      <View style={styles.stepsContainer}>
-        <Text style={styles.stepNumber}>
-          Шаг 2
-        </Text>
-        <Text style={styles.stepText}>
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-          Бла бла бла бла бла бла бла бла бла бла
-        </Text>
-      </View>
+      {steps.map((step, index) => (
+        <View key={index} style={styles.stepsContainer}>
+          <Text style={styles.stepNumber}>
+            Шаг {index + 1}
+          </Text>
+          <Text style={styles.stepText}>
+            {step}
+          </Text>
+        </View>
+      ))}
     </View>
   )
 }

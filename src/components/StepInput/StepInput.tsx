@@ -1,30 +1,46 @@
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function stepInput() {
-  const [steps, setSteps] = useState(['', '']);
-  const [inputHeights, setInputHeights] = useState([40, 40]);
+type StepInputProps = {
+  steps: string[];
+  setSteps: (steps: string[]) => void;
+};
+
+export default function StepInput({ steps: propSteps, setSteps }: StepInputProps) {
+  const [localSteps, setLocalSteps] = useState<string[]>(propSteps);
+  const [inputHeights, setInputHeights] = useState<number[]>(propSteps.map(() => 40));
+
+  // Синхронизация с родительским состоянием
+  useEffect(() => {
+    setLocalSteps(propSteps);
+    setInputHeights(propSteps.map(() => 40));
+  }, [propSteps]);
 
   const addStep = () => {
-    setSteps([...steps, '']);
-    setInputHeights([...inputHeights, 40]); // По умолчанию высота 40
+    const newSteps = [...localSteps, ''];
+    setLocalSteps(newSteps);
+    setSteps(newSteps);
+    setInputHeights([...inputHeights, 40]);
   };
 
   const removeStep = () => {
-    if (steps.length > 2) {
-      setSteps(steps.slice(0, -1));
+    if (localSteps.length > 2) {
+      const newSteps = localSteps.slice(0, -1);
+      setLocalSteps(newSteps);
+      setSteps(newSteps);
       setInputHeights(inputHeights.slice(0, -1));
     }
   };
 
-  const updateStep = (text, index) => {
-    const newSteps = [...steps];
+  const updateStep = (text: string, index: number) => {
+    const newSteps = [...localSteps];
     newSteps[index] = text;
+    setLocalSteps(newSteps);
     setSteps(newSteps);
   };
 
-  const updateHeight = (event, index) => {
+  const updateHeight = (event: any, index: number) => {
     const newHeight = event.nativeEvent.contentSize.height;
     const updatedHeights = [...inputHeights];
     updatedHeights[index] = newHeight;
@@ -33,7 +49,7 @@ export default function stepInput() {
 
   return (
     <View>
-      {steps.map((step, index) => (
+      {localSteps.map((step, index) => (
         <View key={index} style={styles.stepContainer}>
           <Text style={styles.stepTitle}>Шаг {index + 1}</Text>
           <TextInput
@@ -54,7 +70,7 @@ export default function stepInput() {
           iconColor="#E391E9"
           onPress={addStep}
         />
-        {steps.length > 2 && (
+        {localSteps.length > 2 && (
           <IconButton
             icon="minus-circle-outline"
             size={34}
@@ -79,12 +95,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#ffffff',
     minHeight: 40,
-    position: 'relative',
     width: 360,
-    height: 50,
     borderRadius: 10,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
     paddingHorizontal: 10,
     elevation: 10,
   },

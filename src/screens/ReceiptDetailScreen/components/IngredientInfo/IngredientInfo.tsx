@@ -1,14 +1,15 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
 
-export default function IngredientInfo() {
+type IngredientInfoProps = {
+  ingredients: Array<{
+    name: string;
+    color: string;
+    amount: string;
+  }>;
+};
 
-  const ingredients = [
-    { name: 'Сыр', color: '#FFD700', description: '200 грамм' },
-    { name: 'Помидор', color: '#FF6347', description: '2 штуки' },
-    { name: 'Салат', color: '#32CD32', description: '200 грамм' },
-    { name: 'Мясо', color: '#8B4513', description: '800 грамм' },
-  ];
+export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
 
   return(
     <View>
@@ -23,7 +24,7 @@ export default function IngredientInfo() {
               resizeMode="cover"
             />
             <Text style={styles.ingredientText}>{item.name}</Text>
-            <Text style={styles.ingredientDescription}>{item.description}</Text>
+            <Text style={styles.ingredientDescription}>{item.amount}</Text>
           </View>
         ))}
       </View>

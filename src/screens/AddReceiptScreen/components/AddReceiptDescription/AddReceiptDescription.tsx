@@ -1,12 +1,17 @@
 import StepInput from '@/components/StepInput/StepInput';
 import { Text, StyleSheet, View } from 'react-native';
 
-export default function AddReceiptDescription() {
+type AddReceiptDescriptionProps = {
+  addSteps: string[];
+  setAddSteps: (steps: string[]) => void;
+}
+
+export default function AddReceiptDescription({ addSteps, setAddSteps }: AddReceiptDescriptionProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.textInfo}>Шаги приготовления</Text>
 
-      <StepInput />
+      <StepInput steps={addSteps} setSteps={setAddSteps} />
 
       <View style={styles.divider} />
     </View>
