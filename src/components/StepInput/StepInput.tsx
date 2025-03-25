@@ -1,64 +1,57 @@
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type StepInputProps = {
   steps: string[];
   setSteps: (steps: string[]) => void;
+  minSteps?: number;
 };
 
-export default function StepInput({ steps: propSteps, setSteps }: StepInputProps) {
-  const [localSteps, setLocalSteps] = useState<string[]>(propSteps);
-  const [inputHeights, setInputHeights] = useState<number[]>(propSteps.map(() => 40));
-
-  // Синхронизация с родительским состоянием
-  useEffect(() => {
-    setLocalSteps(propSteps);
-    setInputHeights(propSteps.map(() => 40));
-  }, [propSteps]);
+export default function StepInput({ steps, setSteps, minSteps = 1 }: StepInputProps) {
+  const [inputHeights, setInputHeights] = useState<number[]>(
+    steps.map(() => 40)
+  );
 
   const addStep = () => {
-    const newSteps = [...localSteps, ''];
-    setLocalSteps(newSteps);
-    setSteps(newSteps);
+    setSteps([...steps, '']);
     setInputHeights([...inputHeights, 40]);
   };
 
   const removeStep = () => {
-    if (localSteps.length > 2) {
-      const newSteps = localSteps.slice(0, -1);
-      setLocalSteps(newSteps);
-      setSteps(newSteps);
+    if (steps.length > minSteps) {
+      setSteps(steps.slice(0, -1));
       setInputHeights(inputHeights.slice(0, -1));
     }
   };
 
   const updateStep = (text: string, index: number) => {
-    const newSteps = [...localSteps];
+    const newSteps = [...steps];
     newSteps[index] = text;
-    setLocalSteps(newSteps);
     setSteps(newSteps);
   };
 
-  const updateHeight = (event: any, index: number) => {
-    const newHeight = event.nativeEvent.contentSize.height;
-    const updatedHeights = [...inputHeights];
-    updatedHeights[index] = newHeight;
-    setInputHeights(updatedHeights);
+  const updateHeight = (index: number, height: number) => {
+    const newHeights = [...inputHeights];
+    newHeights[index] = Math.max(40, height);
+    setInputHeights(newHeights);
   };
 
   return (
     <View>
-      {localSteps.map((step, index) => (
-        <View key={index} style={styles.stepContainer}>
+      {steps.map((step, index) => (
+        <View key={`step-${index}`} style={styles.stepContainer}>
           <Text style={styles.stepTitle}>Шаг {index + 1}</Text>
           <TextInput
-            style={[styles.input, { height: inputHeights[index] }]}
-            placeholder="Введите описание шага"
+            style={[
+              styles.input,
+              { height: inputHeights[index] || 40 }
+            ]}
+            placeholder="Опишите этот шаг подробно..."
             multiline
             value={step}
             onChangeText={text => updateStep(text, index)}
-            onContentSizeChange={event => updateHeight(event, index)}
+            onContentSizeChange={e => updateHeight(index, e.nativeEvent.contentSize.height)}
           />
         </View>
       ))}
@@ -70,7 +63,7 @@ export default function StepInput({ steps: propSteps, setSteps }: StepInputProps
           iconColor="#E391E9"
           onPress={addStep}
         />
-        {localSteps.length > 2 && (
+        {steps.length > minSteps && (
           <IconButton
             icon="minus-circle-outline"
             size={34}
@@ -85,24 +78,28 @@ export default function StepInput({ steps: propSteps, setSteps }: StepInputProps
 
 const styles = StyleSheet.create({
   stepContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
   },
   stepTitle: {
     fontSize: 16,
     marginBottom: 5,
+    fontFamily: 'Roboto',
+    fontWeight: '600',
   },
   input: {
     fontSize: 16,
     backgroundColor: '#ffffff',
+    width: '100%',
     minHeight: 40,
-    width: 360,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    elevation: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    elevation: 7,
+    textAlignVertical: 'top',
   },
   buttonContainer: {
     flexDirection: 'row',
-    alignSelf: 'center',
-    marginTop: 5,
+    justifyContent: 'center',
+    marginTop: 10,
   },
 });

@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: 'Roboto',
     fontWeight: '800',
-    marginLeft: 30,
+    marginLeft: 10,
   },
 });

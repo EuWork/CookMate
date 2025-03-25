@@ -11,6 +11,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigators/types';
 import { useNavigation } from '@react-navigation/native';
 import { useCallback, useMemo, useState } from 'react';
+import { getIngredientData } from '@/utils/IngredientsMapping';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'AddReceiptScreen'>;
 
@@ -46,19 +47,14 @@ export default function AddReceiptScreen() {
       return;
     }
 
-    const getRandomColor = () => {
-      const colors = ['#FFD700', '#FF6347', '#32CD32', '#8B4513', '#9370DB', '#FFA07A'];
-      return colors[Math.floor(Math.random() * colors.length)];
-    };
-
     const newRecipe = {
-      id: Date.now(), // Используем строковый ID для совместимости
+      id: Date.now(),
       name: recipeName,
       cookingTime,
       calories,
-      ingredients: ingredients.map((ing,) => ({
+      ingredients: ingredients.map(ing => ({
         ...ing,
-        color: getRandomColor(), // Функция для генерации случайного цвета
+        ... getIngredientData(ing.name),
       })),
       steps,
       image,
