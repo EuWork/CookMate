@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
 import { getIngredientData } from '@/utils/IngredientsMapping';
 
@@ -13,7 +13,11 @@ export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
   return (
     <View>
       <Text style={styles.ingredientsText}>Ингредиенты</Text>
-      <View style={styles.imageContainerArea}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
         {ingredients.map((item, index) => {
           const { color, image } = getIngredientData(item.name);
 
@@ -31,7 +35,7 @@ export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
             </View>
           );
         })}
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -44,20 +48,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
   },
-  imageContainerArea: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: 20,
+  scrollContainer: {
     paddingHorizontal: 10,
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   imageIngredientContainer: {
     width: 85,
     height: 75,
     borderRadius: 10,
     elevation: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 10, // Увеличил отступ между элементами
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
   },
   ingredientWrapper: {
     alignItems: 'center',
-    marginBottom: 15,
-    width: '30%',
+    marginRight: 15,
+    width: 100,
   },
   ingredientText: {
     marginTop: 5,

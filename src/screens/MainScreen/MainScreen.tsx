@@ -3,7 +3,7 @@ import { StyleSheet, View, Animated } from 'react-native';
 import ScrollView = Animated.ScrollView;
 import Logo from '@/components/Logo/Logo';
 import Search from '@/components/Search/Search';
-import SquareReceipts from '@/screens/MainScreen/components/SquareReceipts/SquareReceipts';
+import SquareRecipes from '@/screens/MainScreen/components/SquareRecipes/SquareRecipes';
 import MyReceipts from '@/components/MyReceipts/MyReceipts';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigators/types';
@@ -41,7 +41,7 @@ const MainScreen: React.FC = () => {
       <View style={styles.container}>
         <Logo />
         <Search />
-        <SquareReceipts onPressRecipe={handlePress} />
+        <SquareRecipes onPressRecipe={handlePress} />
         <MyReceipts onPressRecipe={handlePress} recipes={recipes} />
       </View>
     </ScrollView>

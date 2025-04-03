@@ -20,7 +20,7 @@ export default function RecipeInfo({ recipe }: RecipeInfoProps) {
   return(
     <View>
       <Card style={styles.imageContainer}>
-        <Card.Cover source={{ uri: recipe.image }} style={styles.image}/>
+        <Card.Cover source={typeof recipe.image === 'number' ? recipe.image : { uri: recipe.image }} style={styles.image}/>
         <IconButton icon="cards-heart-outline" size={40} iconColor="#EC221F" style={styles.iconHeartStyle}/>
         <IconButton icon='chevron-left-box-outline' size={40} iconColor="#2C2B2B" style={styles.iconBackStyle} onPress={() => navigation.goBack()}/>
         <IconButton icon='map-outline' size={40} iconColor="#E391E9" style={styles.iconMapStyle}/>
@@ -30,7 +30,7 @@ export default function RecipeInfo({ recipe }: RecipeInfoProps) {
           {recipe.name}
         </Text>
         <Text style={styles.recipeIngredients}>
-          {recipe.ingredients.length} ингридиентов
+          {recipe.ingredients.length} ингредиентов
         </Text>
         <View style={styles.timeCaloriesContainer}>
           <IconButton icon='clock-outline' size={35} iconColor="#E391E9"/>

@@ -50,7 +50,6 @@ export default function Tabs() {
             color: '#ffffff',
             fontSize: 24,
             fontWeight: 'bold',
-            bottom: 20,
           },
           }}
       />

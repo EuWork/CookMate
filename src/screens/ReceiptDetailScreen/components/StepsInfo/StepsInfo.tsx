@@ -27,7 +27,6 @@ export default function StepsInfo({ steps }: StepsInfoProps) {
 const styles = StyleSheet.create({
   stepsTitleText: {
     marginLeft: 20,
-    marginTop: 80,
     fontSize: 20,
     fontFamily: 'Roboto',
     fontWeight: '700',

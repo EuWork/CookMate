@@ -39,6 +39,7 @@ export default MyReceiptsCard;
 
 const styles = StyleSheet.create({
   cardWrapper: {
+    alignSelf: 'flex-start',
     paddingHorizontal: 20,
   },
   cardComponent: {
