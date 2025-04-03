@@ -1,12 +1,29 @@
 import StepInput from '@/components/StepInput/StepInput';
 import { Text, StyleSheet, View } from 'react-native';
+import { useEffect } from 'react';
 
-export default function AddReceiptDescription() {
+type AddReceiptDescriptionProps = {
+  addSteps: string[];
+  setAddSteps: (steps: string[]) => void;
+}
+
+export default function AddReceiptDescription({ addSteps, setAddSteps }: AddReceiptDescriptionProps) {
+
+  useEffect(() => {
+    if (addSteps.length === 0) {
+      setAddSteps(['']);
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.textInfo}>Шаги приготовления</Text>
 
-      <StepInput />
+      <StepInput
+        steps={addSteps}
+        setSteps={setAddSteps}
+        minSteps={1}
+      />
 
       <View style={styles.divider} />
     </View>
@@ -28,7 +45,7 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: '#dcdcdc',
     marginTop: 5,
-    width: 375,
+    width: '100%',
     height: 2,
   },
 });

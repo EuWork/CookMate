@@ -1,34 +1,43 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
+import { getIngredientData } from '@/utils/IngredientsMapping';
 
-export default function IngredientInfo() {
+type IngredientInfoProps = {
+  ingredients: Array<{
+    name: string;
+    amount: string;
+  }>;
+};
 
-  const ingredients = [
-    { name: 'Сыр', color: '#FFD700', description: '200 грамм' },
-    { name: 'Помидор', color: '#FF6347', description: '2 штуки' },
-    { name: 'Салат', color: '#32CD32', description: '200 грамм' },
-    { name: 'Мясо', color: '#8B4513', description: '800 грамм' },
-  ];
-
-  return(
+export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
+  return (
     <View>
-      <Text style={styles.ingredientsText}>
-        Ингредиенты
-      </Text>
-      <View style={styles.imageContainerArea}>
-        {ingredients.map((item, index) => (
-          <View key={index} style={styles.ingredientWrapper}>
-            <Card.Cover
-              style={[styles.imageIngredientContainer, { backgroundColor: item.color }]} // Установка цвета
-              resizeMode="cover"
-            />
-            <Text style={styles.ingredientText}>{item.name}</Text>
-            <Text style={styles.ingredientDescription}>{item.description}</Text>
-          </View>
-        ))}
-      </View>
+      <Text style={styles.ingredientsText}>Ингредиенты</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        {ingredients.map((item, index) => {
+          const { color, image } = getIngredientData(item.name);
+
+          return (
+            <View key={index} style={styles.ingredientWrapper}>
+              <Card style={[styles.imageIngredientContainer, { backgroundColor: color }]}>
+                <Image
+                  source={image}
+                  style={styles.ingredientImage}
+                  resizeMode="contain"
+                />
+              </Card>
+              <Text style={styles.ingredientText}>{item.name}</Text>
+              <Text style={styles.ingredientDescription}>{item.amount}</Text>
+            </View>
+          );
+        })}
+      </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -39,39 +48,41 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
   },
-  imageContainerArea: {
-    flex: 1,
-    position: 'relative',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    height: 65,
-    marginTop: 20,
+  scrollContainer: {
     paddingHorizontal: 10,
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   imageIngredientContainer: {
-    backgroundColor: '#E391E9',
     width: 85,
     height: 75,
     borderRadius: 10,
     elevation: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 10, // Увеличил отступ между элементами
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ingredientImage: {
+    width: 60,
+    height: 60,
   },
   ingredientWrapper: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    marginRight: 15,
+    width: 100,
   },
   ingredientText: {
     marginTop: 5,
-    marginLeft: 5,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: '600',
     color: '#000000',
+    textAlign: 'center',
   },
   ingredientDescription: {
-    marginLeft: 5,
     fontSize: 14,
     fontFamily: 'Roboto',
     color: '#747474',
+    textAlign: 'center',
   },
-})
+});

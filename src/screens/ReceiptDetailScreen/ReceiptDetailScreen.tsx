@@ -12,14 +12,12 @@ export default function RecipeDetailScreen({ route }) {
     return <Text>Ошибка: рецепт не найден</Text>;
   }
 
-  // cocojamba
-
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        <RecipeInfo />
-        <IngredientInfo />
-        <StepsInfo />
+        <RecipeInfo recipe={recipe}/>
+        <IngredientInfo ingredients={recipe.ingredients} />
+        <StepsInfo steps={recipe.steps}/>
       </View>
     </ScrollView>
   );
