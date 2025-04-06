@@ -20,13 +20,18 @@ const MainScreen: React.FC = () => {
 
   useEffect(() => {
     if (route.params?.newRecipe) {
-      const newRecipe: RecipeTypes = route.params.newRecipe;
-      setRecipes((prevRecipes) => {
-        const exists = prevRecipes.some((r) => r.id === newRecipe.id);
-        return exists ? prevRecipes : [...prevRecipes, newRecipe];
-      });
+      const newRecipe = route.params.newRecipe;
+      setRecipes(prev => [...prev, newRecipe]);
     }
-  }, [route.params?.newRecipe]);
+    if (route.params?.updatedRecipe) {
+      const updatedRecipe = route.params.updatedRecipe;
+      setRecipes(prev => prev.map(r => r.id === updatedRecipe.id ? updatedRecipe : r));
+    }
+  }, [route.params]);
+
+  const handleDeleteRecipe = useCallback((recipeId: string) => {
+    setRecipes(prev => prev.filter(recipe => recipe.id !== recipeId));
+  }, []);
 
   const handlePress = useCallback((recipe: RecipeTypes) => {
     if (!recipe) {
@@ -42,7 +47,7 @@ const MainScreen: React.FC = () => {
         <Logo />
         <Search />
         <SquareRecipes onPressRecipe={handlePress} />
-        <MyReceipts onPressRecipe={handlePress} recipes={recipes} />
+        <MyReceipts onPressRecipe={handlePress} recipes={recipes} onDeleteRecipe={handleDeleteRecipe}/>
       </View>
     </ScrollView>
   );

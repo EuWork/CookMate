@@ -9,14 +9,19 @@ import AddReceiptDescription from '@/screens/AddReceiptScreen/components/AddRece
 import AddReceiptImage from '@/screens/AddReceiptScreen/components/AddReceiptImage/AddReceiptImage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigators/types';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useMemo, useState } from 'react';
 import { getIngredientData } from '@/utils/IngredientsMapping';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'AddReceiptScreen'>;
+type AddReceiptScreenRouteProp = RouteProp<RootStackParamList, 'AddReceiptScreen'>;
 
 export default function AddReceiptScreen() {
   const navigation = useNavigation<NavigationProp>();
+
+  const route = useRoute<AddReceiptScreenRouteProp>();
+
+  const { recipeToEdit, isEditing } = route.params || {};
 
   const [recipeName, setRecipeName] = useState('');
   const [cookingTime, setCookingTime] = useState('');
@@ -47,22 +52,34 @@ export default function AddReceiptScreen() {
       return;
     }
 
-    const newRecipe = {
-      id: Date.now(),
-      name: recipeName,
-      cookingTime,
-      calories,
-      ingredients: ingredients.map(ing => ({
-        ...ing,
-        ... getIngredientData(ing.name),
-      })),
-      steps,
-      image,
-      createdAt: new Date().toISOString(),
-    };
-
-    navigation.navigate('MainScreen', { newRecipe });
-  }, [isFormValid, recipeName, cookingTime, calories, ingredients, steps, image, navigation]);
+    if (isEditing && recipeToEdit) {
+      const updatedRecipe = {
+        ...recipeToEdit,
+        name: recipeName,
+        cookingTime,
+        calories,
+        ingredients,
+        steps,
+        image
+      };
+      navigation.navigate('MainScreen', { updatedRecipe });
+    } else {
+      const newRecipe = {
+        id: Date.now().toString(),
+        name: recipeName,
+        cookingTime,
+        calories,
+        ingredients: ingredients.map(ing => ({
+          ...ing,
+          ... getIngredientData(ing.name),
+        })),
+        steps,
+        image,
+        createdAt: new Date().toISOString(),
+      };
+      navigation.navigate('MainScreen', { newRecipe });
+    }
+  }, [isEditing, recipeToEdit, isFormValid, recipeName, cookingTime, calories, ingredients, steps, image, navigation]);
 
   return (
     <ScrollView style={styles.scrollContainer} keyboardShouldPersistTaps="handled">
@@ -84,7 +101,7 @@ export default function AddReceiptScreen() {
           labelStyle={styles.buttonText}
           onPress={handleCreateRecipe}
         >
-          Создать рецепт
+          {isEditing ? 'Редактировать' : 'Создать рецепт'}
         </Button>
       </View>
     </ScrollView>
