@@ -1,32 +1,65 @@
-import { Card, IconButton } from 'react-native-paper';
+import { Card, IconButton, Menu } from 'react-native-paper';
 import { Text, View, StyleSheet } from 'react-native';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 type MyReceiptsCardProps = {
   imageSource: { uri: string };
   title: string;
   info: string;
+  onEdit: () => void;
+  onDelete: () => void;
 };
 
-const MyReceiptsCard = memo(({ imageSource, title, info }: MyReceiptsCardProps) => {
+const MyReceiptsCard = memo(({ imageSource, title, info, onEdit, onDelete }: MyReceiptsCardProps) => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setVisible(false);
+    };
+  }, []);
+
+  const handleEdit = () => {
+    setVisible(false);
+    onEdit();
+  };
+
+  const handleDelete = () => {
+    setVisible(false);
+    onDelete();
+  };
+
   return (
     <View style={styles.cardWrapper}>
       <Card style={styles.cardComponent}>
-        <Card.Cover source={imageSource} style={styles.imageReceipt} />
+        <Card.Cover source={imageSource} style={styles.imageReceipt} resizeMode='cover' />
 
-        <IconButton
-          icon="dots-horizontal"
-          size={34}
-          style={[styles.iconStyle, styles.iconMenuPosition]}
-          iconColor="#E391E9"
-        />
+        <View style={styles.iconsContainer}>
+          <Menu
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            anchor={
+              <IconButton
+                icon="dots-horizontal"
+                size={34}
+                iconColor="#E391E9"
+                onPress={() => setVisible(true)}
+                style={styles.iconMenuPosition}
+              />
+            }
+          >
+            <Menu.Item onPress={handleEdit} title="Редактировать" />
+            <Menu.Item onPress={handleDelete} title="Удалить" />
+          </Menu>
 
-        <IconButton
-          icon="cards-heart-outline"
-          size={30}
-          style={[styles.iconStyle, styles.iconHeartPosition]}
-          iconColor="#EC221F"
-        />
+          <IconButton
+            icon="cards-heart-outline"
+            size={30}
+            iconColor="#EC221F"
+            onPress={(e) => e.stopPropagation()}
+            style={styles.iconHeartPosition}
+          />
+        </View>
       </Card>
 
       <Text style={styles.foodName}>{title}</Text>
@@ -67,14 +100,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '500',
   },
-  iconStyle: {
-    position: 'absolute',
-    alignSelf: 'flex-end',
-  },
   iconMenuPosition: {
-    bottom: 310,
+    left: 60,
+    bottom: 10
   },
   iconHeartPosition: {
     top: 310,
+  },
+  iconsContainer: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    flexDirection: 'row',
   },
 });

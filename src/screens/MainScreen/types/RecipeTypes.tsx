@@ -1,5 +1,5 @@
 export type RecipeTypes = {
-  id: number;
+  id: string;
   name: string;
   cookingTime: string;
   calories: string;
