@@ -1,6 +1,6 @@
 import { TextInput } from 'react-native-paper';
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { styles } from '@/components/Search/styles/SearchStyles';
 
 export default function Search() {
   const [text, setText] = useState<string>('');
@@ -20,18 +20,3 @@ export default function Search() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  search: {
-    position: 'relative',
-    backgroundColor: '#ffffff',
-    width: 360,
-    height: 40,
-    marginTop: 20,
-    borderRadius: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingHorizontal: 15,
-    elevation: 5,
-  },
-});

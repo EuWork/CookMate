@@ -5,7 +5,9 @@ const config = getDefaultConfig(__dirname);
 
 config.resolver.extraNodeModules = {
   ...config.resolver.extraNodeModules,
-  'react-native-gesture-handler': require.resolve('react-native-gesture-handler'),
+  'react-native-gesture-handler': require.resolve(
+    'react-native-gesture-handler',
+  ),
 };
 
 module.exports = config;

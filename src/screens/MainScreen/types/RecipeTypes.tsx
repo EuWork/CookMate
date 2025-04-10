@@ -6,4 +6,4 @@ export type RecipeTypes = {
   ingredients: any[];
   steps: any[];
   image: string | null;
-}
+};

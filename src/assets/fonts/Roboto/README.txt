@@ -7,11 +7,11 @@ Roboto is a variable font with these axes:
   wdth
   wght
 
-This means all the styles are contained in these files:
+This means all the myRecipesStyles are contained in these files:
   Roboto/Roboto-VariableFont_wdth,wght.ttf
   Roboto/Roboto-Italic-VariableFont_wdth,wght.ttf
 
-If your app fully supports variable fonts, you can now pick intermediate styles
+If your app fully supports variable fonts, you can now pick intermediate myRecipesStyles
 that aren’t available as static fonts. Not all apps support variable fonts, and
 in those cases you can use the static font files for Roboto:
   Roboto/static/Roboto_Condensed-Thin.ttf
@@ -75,7 +75,7 @@ Get started
 1. Install the font files you want to use
 
 2. Use your app's font picker to view the font family and all the
-available styles
+available myRecipesStyles
 
 Learn more about variable fonts
 -------------------------------

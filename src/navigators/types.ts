@@ -6,8 +6,9 @@ export type RootStackParamList = {
     updatedRecipe?: RecipeTypes;
     deletedRecipeId?: string;
   };
+  FavoriteReceiptsScreen: undefined;
   ReceiptDetailScreen: { recipe: any };
-  AddReceiptScreen: {
+  AddRecipeScreen: {
     recipeToEdit?: RecipeTypes;
     isEditing?: boolean;
   };

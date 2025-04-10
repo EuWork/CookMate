@@ -1,7 +1,7 @@
-import MainScreen from '@/screens/MainScreen/MainScreen';
+import { MainScreen } from '@/screens/MainScreen/MainScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FavoriteReceiptsScreen from '@/screens/FavoriteReceiptsScreen/FavoriteReceiptsScreen';
-import AddReceiptScreen from '@/screens/AddReceiptScreen/AddReceiptScreen';
+import FavoriteReceiptsScreen from '@/screens/FavRecipeScreen/FavRecipesScreen';
+import AddRecipeScreen from '@/screens/AddRecipeScreen/AddRecipeScreen';
 import SettingScreen from '@/screens/SettingScreen/SettingScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar';
@@ -33,7 +33,7 @@ export default function Tabs() {
       />
       <Tab.Screen
         name="AddReceiptScreen"
-        component={AddReceiptScreen}
+        component={AddRecipeScreen}
         options={{ tabBarIcon: getTabBarIcon('plus-circle-outline') }}
       />
       <Tab.Screen
@@ -51,7 +51,7 @@ export default function Tabs() {
             fontSize: 24,
             fontWeight: 'bold',
           },
-          }}
+        }}
       />
     </Tab.Navigator>
   );

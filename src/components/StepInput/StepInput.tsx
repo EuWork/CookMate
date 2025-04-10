@@ -1,16 +1,16 @@
-import { Text, TextInput, View, StyleSheet } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useState } from 'react';
+import { StepInputTypesProps } from '@/components/StepInput/types/StepInputTypes';
+import { styles } from '@/components/StepInput/styles/StepInputStyles';
 
-type StepInputProps = {
-  steps: string[];
-  setSteps: (steps: string[]) => void;
-  minSteps?: number;
-};
-
-export default function StepInput({ steps, setSteps, minSteps = 1 }: StepInputProps) {
+export default function StepInput({
+  steps,
+  setSteps,
+  minSteps = 1,
+}: StepInputTypesProps) {
   const [inputHeights, setInputHeights] = useState<number[]>(
-    steps.map(() => 40)
+    steps.map(() => 40),
   );
 
   const addStep = () => {
@@ -43,15 +43,14 @@ export default function StepInput({ steps, setSteps, minSteps = 1 }: StepInputPr
         <View key={`step-${index}`} style={styles.stepContainer}>
           <Text style={styles.stepTitle}>Шаг {index + 1}</Text>
           <TextInput
-            style={[
-              styles.input,
-              { height: inputHeights[index] || 40 }
-            ]}
+            style={[styles.input, { height: inputHeights[index] || 40 }]}
             placeholder="Опишите этот шаг подробно..."
             multiline
             value={step}
             onChangeText={text => updateStep(text, index)}
-            onContentSizeChange={e => updateHeight(index, e.nativeEvent.contentSize.height)}
+            onContentSizeChange={e =>
+              updateHeight(index, e.nativeEvent.contentSize.height)
+            }
           />
         </View>
       ))}
@@ -75,31 +74,3 @@ export default function StepInput({ steps, setSteps, minSteps = 1 }: StepInputPr
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  stepContainer: {
-    marginBottom: 15,
-  },
-  stepTitle: {
-    fontSize: 16,
-    marginBottom: 5,
-    fontFamily: 'Roboto',
-    fontWeight: '600',
-  },
-  input: {
-    fontSize: 16,
-    backgroundColor: '#ffffff',
-    width: '100%',
-    minHeight: 40,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    elevation: 7,
-    textAlignVertical: 'top',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-  },
-});

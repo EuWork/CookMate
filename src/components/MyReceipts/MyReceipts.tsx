@@ -1,35 +1,37 @@
-import { Text, View, StyleSheet, Animated, TouchableOpacity, Alert } from 'react-native';
+import {
+  Text,
+  View,
+  Animated,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import ScrollView = Animated.ScrollView;
 import { useFonts } from 'expo-font';
-import MyReceiptsCard from '@/components/MyReceipts/components/MyReceiptsCard/MyReceiptsCard';
 import { ActivityIndicator } from 'react-native-paper';
 import { RecipeTypes } from '@/screens/MainScreen/types/RecipeTypes';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigators/types';
+import { MyRecipesTypesProps } from '@/components/MyReceipts/components/types/MyRecipesTypes';
+import { MyRecipesCard } from '@/components/MyReceipts/components/MyRecipesCard/MyRecipesCard';
+import { myRecipesStyles } from '@/components/MyReceipts/components/styles/MyRecipesStyles';
 
-type MyReceiptsProps = {
-  onPressRecipe: (recipe: RecipeTypes) => void;
-  recipes: RecipeTypes[];
-  onDeleteRecipe: (recipeId: string) => void;
-};
-
-const MyReceipts: React.FC<MyReceiptsProps> = ({ onPressRecipe, recipes, onDeleteRecipe }) => {
+const MyReceipts: React.FC<MyRecipesTypesProps> = ({
+  onPressRecipe,
+  recipes,
+  onDeleteRecipe,
+}) => {
   const [fontsLoaded] = useFonts({
     Roboto: require('src/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf'),
   });
 
-  if (!fontsLoaded) {
-    return <ActivityIndicator />;
-  }
-
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleEditRecipe = (recipe: RecipeTypes) => {
-    navigation.navigate('AddReceiptScreen', {
+    navigation.navigate('AddRecipeScreen', {
       recipeToEdit: recipe,
-      isEditing: true
+      isEditing: true,
     });
   };
 
@@ -40,35 +42,40 @@ const MyReceipts: React.FC<MyReceiptsProps> = ({ onPressRecipe, recipes, onDelet
       [
         {
           text: 'Отмена',
-          style: 'cancel'
+          style: 'cancel',
         },
         {
           text: 'Удалить',
           style: 'destructive',
-          onPress: () => onDeleteRecipe(recipeId)
-        }
-      ]
+          onPress: () => onDeleteRecipe(recipeId),
+        },
+      ],
     );
   };
 
+  if (!fontsLoaded) {
+    return <ActivityIndicator />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.myRecipesTitle}>Мои рецепты</Text>
+    <View style={myRecipesStyles.container}>
+      <Text style={myRecipesStyles.myRecipesTitle}>Мои рецепты</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.scrollContentContainer}
+        style={myRecipesStyles.scrollContentContainer}
         snapToAlignment="start"
       >
-        {recipes.map((recipe) => (
-          <View key={recipe.id} style={styles.recipeContainer}>
+        {recipes.map(recipe => (
+          <View key={recipe.id} style={myRecipesStyles.recipeContainer}>
             <TouchableOpacity onPress={() => onPressRecipe(recipe)}>
-              <MyReceiptsCard
+              <MyRecipesCard
                 imageSource={{ uri: recipe.image }}
                 title={recipe.name}
                 info={`${recipe.ingredients.length} ингредиентов ● ${recipe.cookingTime}`}
                 onEdit={() => handleEditRecipe(recipe)}
                 onDelete={() => handleDeleteRecipe(recipe.id)}
+                recipe={recipe}
               />
             </TouchableOpacity>
           </View>
@@ -79,29 +86,3 @@ const MyReceipts: React.FC<MyReceiptsProps> = ({ onPressRecipe, recipes, onDelet
 };
 
 export default React.memo(MyReceipts);
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    paddingLeft: 20,
-  },
-  myRecipesTitle: {
-    marginTop: 10,
-    fontSize: 26,
-    fontFamily: 'Roboto',
-    fontWeight: '800',
-  },
-  scrollContentContainer: {
-    paddingRight: 15,
-  },
-  recipeContainer: {
-    marginRight: 15,
-  },
-  emptyContainer: {
-    paddingVertical: 20,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#747474',
-  },
-});
