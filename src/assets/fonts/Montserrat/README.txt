@@ -6,11 +6,11 @@ This download contains Montserrat as both variable fonts and static fonts.
 Montserrat is a variable font with this axis:
   wght
 
-This means all the styles are contained in these files:
+This means all the myRecipesStyles are contained in these files:
   Montserrat/Montserrat-VariableFont_wght.ttf
   Montserrat/Montserrat-Italic-VariableFont_wght.ttf
 
-If your app fully supports variable fonts, you can now pick intermediate styles
+If your app fully supports variable fonts, you can now pick intermediate myRecipesStyles
 that aren’t available as static fonts. Not all apps support variable fonts, and
 in those cases you can use the static font files for Montserrat:
   Montserrat/static/Montserrat-Thin.ttf
@@ -38,7 +38,7 @@ Get started
 1. Install the font files you want to use
 
 2. Use your app's font picker to view the font family and all the
-available styles
+available myRecipesStyles
 
 Learn more about variable fonts
 -------------------------------
