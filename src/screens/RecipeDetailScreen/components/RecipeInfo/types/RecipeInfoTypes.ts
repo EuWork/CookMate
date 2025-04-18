@@ -1,6 +1,6 @@
 export type RecipeInfoProps = {
   recipe: {
-    id: string;
+    id: number;
     name: string;
     cookingTime: string;
     calories: string;

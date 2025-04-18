@@ -34,4 +34,10 @@ export const styles = StyleSheet.create({
     width: 300,
     lineHeight: 20,
   },
+  noStepsText: {
+    marginTop: 10,
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 16,
+  },
 });

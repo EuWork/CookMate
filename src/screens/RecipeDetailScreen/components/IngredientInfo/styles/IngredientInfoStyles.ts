@@ -45,4 +45,10 @@ export const styles = StyleSheet.create({
     color: '#747474',
     textAlign: 'center',
   },
+  noIngredientsText: {
+    marginTop: 10,
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 16,
+  },
 });

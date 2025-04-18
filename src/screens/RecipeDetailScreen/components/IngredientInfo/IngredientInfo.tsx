@@ -5,6 +5,25 @@ import { IngredientInfoProps } from '@/screens/RecipeDetailScreen/components/Ing
 import { styles } from './styles/IngredientInfoStyles';
 
 export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
+  if (!ingredients || !Array.isArray(ingredients)) {
+    return (
+      <View>
+        <Text style={styles.ingredientsText}>Ингредиенты</Text>
+        <Text style={styles.noIngredientsText}>Нет данных об ингредиентах</Text>
+      </View>
+    );
+  }
+
+  // Если массив пустой
+  if (ingredients.length === 0) {
+    return (
+      <View>
+        <Text style={styles.ingredientsText}>Ингредиенты</Text>
+        <Text style={styles.noIngredientsText}>Ингредиенты не указаны</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <Text style={styles.ingredientsText}>Ингредиенты</Text>

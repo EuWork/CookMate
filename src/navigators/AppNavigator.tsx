@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from '@/navigators/Tabs';
 import ReceiptDetailScreen from '@/screens/RecipeDetailScreen/RecipeDetailScreen';
+import AddRecipeScreen from '@/screens/AddRecipeScreen/AddRecipeScreen';
 
 export default function AppNavigator() {
   const Stack = createStackNavigator();
@@ -12,6 +13,7 @@ export default function AppNavigator() {
         name="ReceiptDetailScreen"
         component={ReceiptDetailScreen}
       />
+      <Stack.Screen name="AddRecipeScreen" component={AddRecipeScreen} />
     </Stack.Navigator>
   );
 }

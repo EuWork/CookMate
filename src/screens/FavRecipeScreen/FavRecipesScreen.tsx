@@ -16,7 +16,12 @@ export default function FavoriteReceiptsScreen() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handlePressRecipe = (recipe: RecipeTypes) => {
-    navigation.navigate('ReceiptDetailScreen', { recipe });
+    const fullRecipe = {
+      ...recipe,
+      ingredients: recipe.ingredients || [],
+      steps: recipe.steps || []
+    };
+    navigation.navigate('ReceiptDetailScreen', { recipe: fullRecipe });
   };
 
   return (

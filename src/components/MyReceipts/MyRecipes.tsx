@@ -17,11 +17,11 @@ import { MyRecipesTypesProps } from '@/components/MyReceipts/components/types/My
 import { MyRecipesCard } from '@/components/MyReceipts/components/MyRecipesCard/MyRecipesCard';
 import { myRecipesStyles } from '@/components/MyReceipts/components/styles/MyRecipesStyles';
 
-const MyReceipts: React.FC<MyRecipesTypesProps> = ({
-  onPressRecipe,
-  recipes,
-  onDeleteRecipe,
-}) => {
+const MyRecipes: React.FC<MyRecipesTypesProps> = ({
+                                                    onPressRecipe,
+                                                    recipes,
+                                                    onDeleteRecipe
+                                                  }) => {
   const [fontsLoaded] = useFonts({
     Roboto: require('src/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf'),
   });
@@ -29,13 +29,26 @@ const MyReceipts: React.FC<MyRecipesTypesProps> = ({
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleEditRecipe = (recipe: RecipeTypes) => {
+    if (!navigation) {
+      console.error('Navigation is not available');
+      return;
+    }
+
     navigation.navigate('AddRecipeScreen', {
-      recipeToEdit: recipe,
-      isEditing: true,
+      recipeToEdit: {
+        ...recipe,
+        ingredients: Array.isArray(recipe.ingredients)
+          ? recipe.ingredients
+          : [],
+        steps: Array.isArray(recipe.steps)
+          ? recipe.steps
+          : []
+      },
+      isEditing: true
     });
   };
 
-  const handleDeleteRecipe = (recipeId: string) => {
+  const handleDeleteRecipe = async (recipeId: number) => {
     Alert.alert(
       'Удалить рецепт',
       'Вы уверены, что хотите удалить этот рецепт?',
@@ -47,7 +60,14 @@ const MyReceipts: React.FC<MyRecipesTypesProps> = ({
         {
           text: 'Удалить',
           style: 'destructive',
-          onPress: () => onDeleteRecipe(recipeId),
+          onPress: async () => {
+            try {
+              onDeleteRecipe(recipeId);
+            } catch (error) {
+              console.error('Error deleting recipe:', error);
+              Alert.alert('Ошибка', 'Не удалось удалить рецепт');
+            }
+          },
         },
       ],
     );
@@ -85,4 +105,4 @@ const MyReceipts: React.FC<MyRecipesTypesProps> = ({
   );
 };
 
-export default React.memo(MyReceipts);
+export default React.memo(MyRecipes);

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const myRecipesCardStyles = StyleSheet.create({
   cardWrapper: {
     alignSelf: 'flex-start',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   cardComponent: {
     borderRadius: 20,
