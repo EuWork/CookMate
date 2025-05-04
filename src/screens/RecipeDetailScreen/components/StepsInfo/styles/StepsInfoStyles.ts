@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
   stepNumber: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 30,
     fontSize: 16,
     fontFamily: 'Roboto',
@@ -33,5 +33,11 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     width: 300,
     lineHeight: 20,
+    flexWrap: 'wrap',
+  },
+  noStepsText: {
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 16,
   },
 });

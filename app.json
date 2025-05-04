@@ -1,35 +1,4 @@
 {
-  "expo": {
-    "name": "CookMate",
-    "slug": "CookMate",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "assetBundlePatterns": ["**/*"],
-    "splash": {
-      "image": "./src/assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.koldyn.CookMate"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "f0b50c88-18d5-4fb9-8c4b-760629079cb1"
-      }
-    }
-  }
+  "name": "CookMate2",
+  "displayName": "CookMate2"
 }

@@ -1,6 +1,6 @@
 import { TextInput } from 'react-native-paper';
 import { View } from 'react-native';
-import { styles } from '@/components/IngredientsInput/styles/IngredientsInputStyles';
+import { styles } from './styles/IngredientsInputStyles';
 
 interface IIngredientsInputProps {
   name: string;

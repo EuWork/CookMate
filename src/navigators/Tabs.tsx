@@ -3,15 +3,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FavoriteReceiptsScreen from '@/screens/FavRecipeScreen/FavRecipesScreen';
 import AddRecipeScreen from '@/screens/AddRecipeScreen/AddRecipeScreen';
 import SettingScreen from '@/screens/SettingScreen/SettingScreen';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar';
 
 const Tab = createBottomTabNavigator();
 
-const getTabBarIcon =
-  name =>
-  ({ color, size }) => (
-    <MaterialCommunityIcons size={size} color={color} name={name} />
+const getTabBarIcon = (name: string) =>
+  ({ color, size }: { color: string; size: number }) => (
+    <MaterialCommunityIcons
+      size={size}
+      color={color}
+      name={name}
+    />
   );
 
 export default function Tabs() {

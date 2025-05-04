@@ -4,19 +4,21 @@ import { useNavigation } from '@react-navigation/native';
 import { useFavorites } from '@/hooks/useFavorites';
 import { RecipeInfoProps } from '@/screens/RecipeDetailScreen/components/RecipeInfo/types/RecipeInfoTypes';
 import { styles } from './styles/RecipeInfoStyles';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '@/navigators/types.ts';
 
 export default function RecipeInfo({ recipe }: RecipeInfoProps) {
-  const navigation = useNavigation();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <View>
       <Card style={styles.imageContainer}>
         <Card.Cover
           source={
-            typeof recipe.image === 'number'
-              ? recipe.image
-              : { uri: recipe.image }
+            recipe.image
+              ? { uri: recipe.image }
+              : require('@/assets/ingredients/default.png')
           }
           style={styles.image}
         />
@@ -39,6 +41,7 @@ export default function RecipeInfo({ recipe }: RecipeInfoProps) {
           size={40}
           iconColor="#E391E9"
           style={styles.iconMapStyle}
+          onPress={() => navigation.navigate('MapScreen')}
         />
       </Card>
       <View style={styles.recipeInfo}>
@@ -50,7 +53,7 @@ export default function RecipeInfo({ recipe }: RecipeInfoProps) {
           <IconButton icon="clock-outline" size={35} iconColor="#E391E9" />
           <Text style={styles.timeStyle}>{recipe.cookingTime}</Text>
           <IconButton icon="coffee-outline" size={35} iconColor="#E391E9" />
-          <Text style={styles.timeStyle}>{recipe.calories} каллорий</Text>
+          <Text style={styles.timeStyle}>{recipe.calories} калорий</Text>
         </View>
       </View>
     </View>

@@ -1,10 +1,27 @@
 import { Text, View, Image, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
-import { getIngredientData } from '@/utils/IngredientsMapping/IngredientsMapping';
 import { IngredientInfoProps } from '@/screens/RecipeDetailScreen/components/IngredientInfo/types/IngredientInfoTypes';
 import { styles } from './styles/IngredientInfoStyles';
 
 export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
+  if (!ingredients || !Array.isArray(ingredients)) {
+    return (
+      <View>
+        <Text style={styles.ingredientsText}>Ингредиенты</Text>
+        <Text style={styles.noIngredientsText}>Нет данных об ингредиентах</Text>
+      </View>
+    );
+  }
+
+  if (ingredients.length === 0) {
+    return (
+      <View>
+        <Text style={styles.ingredientsText}>Ингредиенты</Text>
+        <Text style={styles.noIngredientsText}>Ингредиенты не указаны</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <Text style={styles.ingredientsText}>Ингредиенты</Text>
@@ -14,18 +31,15 @@ export default function IngredientInfo({ ingredients }: IngredientInfoProps) {
         contentContainerStyle={styles.scrollContainer}
       >
         {ingredients.map((item, index) => {
-          const { color, image } = getIngredientData(item.name);
+          const imageSource = item.image
+            ? { uri: item.image }
+            : require('@/assets/ingredients/default.png');
 
           return (
             <View key={index} style={styles.ingredientWrapper}>
-              <Card
-                style={[
-                  styles.imageIngredientContainer,
-                  { backgroundColor: color },
-                ]}
-              >
+              <Card style={styles.imageIngredientContainer}>
                 <Image
-                  source={image}
+                  source={imageSource}
                   style={styles.ingredientImage}
                   resizeMode="contain"
                 />

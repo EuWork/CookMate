@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
     elevation: 5,
+    fontWeight: '700'
   },
   drawerText: {
     textAlign: 'center',

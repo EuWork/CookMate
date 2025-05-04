@@ -40,7 +40,7 @@ export default function IngredientsGroupInput({
   }, [ingredients, setAddIngredients]);
 
   const updateIngredient = useCallback(
-    (id: number, field: keyof Ingredient, value: string) => {
+    (id: number | undefined, field: keyof Ingredient, value: string) => {
       const newIngredients = ingredients.map(ingredient =>
         ingredient.id === id ? { ...ingredient, [field]: value } : ingredient,
       );

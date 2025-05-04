@@ -10,47 +10,54 @@ import AddReceiptImage from '@/screens/AddRecipeScreen/components/AddRecipeImage
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigators/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useMemo, useReducer } from 'react';
-import { getIngredientData } from '@/utils/IngredientsMapping/IngredientsMapping';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { initialState, recipeReducer } from '@/screens/AddRecipeScreen/components/RecipeReducer/RecipeReducer';
 import { styles } from '@/screens/AddRecipeScreen/styles/AddRecipeScreenStyles';
+import { RecipesApi } from '@/services/api';
+import { RecipeTypes } from '@/screens/MainScreen/types/RecipeTypes';
 
-type NavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'AddRecipeScreen'
->;
-type AddReceiptScreenRouteProp = RouteProp<
-  RootStackParamList,
-  'AddRecipeScreen'
->;
+type NavigationProp = StackNavigationProp<RootStackParamList, 'AddRecipeScreen'>;
+type AddReceiptScreenRouteProp = RouteProp<RootStackParamList, 'AddRecipeScreen'>;
+
+const normalizeRecipeData = (recipe: RecipeTypes) => {
+  return {
+    ...recipe,
+    ingredients: Array.isArray(recipe.ingredients)
+      ? recipe.ingredients
+      : typeof recipe.ingredients === 'string'
+        ? JSON.parse(recipe.ingredients)
+        : [],
+    steps: Array.isArray(recipe.steps)
+      ? recipe.steps
+      : typeof recipe.steps === 'string'
+        ? JSON.parse(recipe.steps)
+        : []
+  };
+};
 
 export default function AddRecipeScreen() {
   const navigation = useNavigation<NavigationProp>();
-
   const route = useRoute<AddReceiptScreenRouteProp>();
-
   const { recipeToEdit, isEditing } = route.params || {};
+  const [state, dispatch] = useReducer(recipeReducer, initialState);
 
-  const [state, dispatch] = useReducer(recipeReducer, {
-    ...initialState,
-    ...(isEditing && recipeToEdit ? recipeToEdit : {}),
-  });
+  useEffect(() => {
+    if (isEditing && recipeToEdit) {
+      dispatch({ type: 'INIT_STATE', payload: normalizeRecipeData(recipeToEdit) });
+    }
+  }, [isEditing, recipeToEdit]);
 
-  const isFormValid = useMemo(() => {
-    return (
-      state.name.trim() !== '' &&
-      state.cookingTime.trim() !== '' &&
-      state.calories.trim() !== '' &&
-      state.ingredients.length >= 3 &&
-      state.ingredients.every(
-        ing => ing.name.trim() !== '' && ing.amount.trim() !== '',
-      ) &&
-      state.steps.every(step => step.trim() !== '') &&
-      state.image !== null
-    );
-  }, [state]);
+  const isFormValid = useMemo(() => (
+    state.name.trim() !== '' &&
+    state.cookingTime.trim() !== '' &&
+    state.calories.trim() !== '' &&
+    state.ingredients.length >= 3 &&
+    state.ingredients.every(ing => ing.name.trim() !== '' && ing.amount.trim() !== '') &&
+    state.steps.every(step => step.trim() !== '') &&
+    state.image !== null
+  ), [state]);
 
-  const handleCreateRecipe = useCallback(() => {
+  const handleSaveRecipe = useCallback(async () => {
     if (!isFormValid) {
       Alert.alert(
         'Не все данные заполнены',
@@ -60,22 +67,47 @@ export default function AddRecipeScreen() {
       return;
     }
 
-    const recipeData = {
-      ...state,
-      ingredients: state.ingredients.map(ing => ({
-        ...ing,
-        ...getIngredientData(ing.name),
-      })),
-      ...(!isEditing && {
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-      }),
+    const recipeData: RecipeTypes = {
+      id: 0,
+      name: state.name,
+      cookingTime: state.cookingTime,
+      calories: state.calories,
+      image: state.image!,
+      ingredients: state.ingredients,
+      steps: state.steps,
+      ...(isEditing && recipeToEdit && { id: recipeToEdit.id })
     };
 
-    navigation.navigate('MainScreen', {
-      [isEditing ? 'updatedRecipe' : 'newRecipe']: recipeData,
-    });
-  }, [isFormValid, state, isEditing, navigation]);
+    try {
+      const apiCall = isEditing && recipeToEdit
+        ? await RecipesApi.UpdateRecipe(recipeData)
+        : await RecipesApi.CreateRecipe(recipeData);
+      const [response] = await Promise.all([apiCall]);
+
+      navigation.navigate('MainScreen', {
+        refresh: true,
+        ...(isEditing
+            ? { updatedRecipe: response.data }
+            : { newRecipe: response.data }
+        )
+      });
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+      Alert.alert(
+        "Ошибка",
+        isEditing ? "Не удалось обновить рецепт" : "Не удалось создать рецепт"
+      );
+    }
+  }, [isFormValid, state, isEditing, recipeToEdit, navigation]);
+
+  const handlers = useMemo(() => ({
+    setImage: (uri: string) => dispatch({ type: 'SET_IMAGE', payload: uri }),
+    setName: (name: string) => dispatch({ type: 'SET_RECIPE_NAME', payload: name }),
+    setCookingTime: (time: string) => dispatch({ type: 'SET_COOKING_TIME', payload: time }),
+    setCalories: (cals: string) => dispatch({ type: 'SET_CALORIES', payload: cals }),
+    setIngredients: (ings: any[]) => dispatch({ type: 'SET_INGREDIENTS', payload: ings }),
+    setSteps: (steps: string[]) => dispatch({ type: 'SET_STEPS', payload: steps }),
+  }), []);
 
   return (
     <ScrollView
@@ -86,35 +118,43 @@ export default function AddRecipeScreen() {
         <Logo />
         <AddReceiptImage
           image={state.image}
-          setImage={uri => dispatch({type: 'SET_IMAGE', payload: uri})}
+          setImage={handlers.setImage}
           name={state.name}
-          setName={name => dispatch({type: 'SET_RECIPE_NAME', payload: name})}
+          setName={handlers.setName}
         />
+
         <Text style={styles.textInfo}>Время готовки</Text>
         <RecipesInput
           placeholder="Введите время готовки"
-          onChangeText={time => dispatch({type: 'SET_COOKING_TIME', payload: time})}
+          onChangeText={handlers.setCookingTime}
         />
         <Divider />
+
         <Text style={styles.textInfo}>Количество калорий</Text>
         <RecipesInput
           placeholder="Введите количество калорий"
-          onChangeText={cals => dispatch({type: 'SET_CALORIES', payload: cals})}
+          onChangeText={handlers.setCalories}
         />
         <Divider />
+
         <IngredientsGroupInput
           addIngredients={state.ingredients}
-          setAddIngredients={ings => dispatch({type: 'SET_INGREDIENTS', payload: ings})}
+          setAddIngredients={handlers.setIngredients}
         />
-        <AddReceiptDescription addSteps={state.steps} setAddSteps={steps => dispatch({type: 'SET_STEPS', payload: steps})} />
+
+        <AddReceiptDescription
+          addSteps={state.steps}
+          setAddSteps={handlers.setSteps}
+        />
+
         <Button
           mode="contained"
           buttonColor="#E391E9"
           style={styles.addButton}
           labelStyle={styles.buttonText}
-          onPress={handleCreateRecipe}
+          onPress={handleSaveRecipe}
         >
-          {isEditing ? 'Редактировать' : 'Создать рецепт'}
+          {isEditing ? 'Сохранить изменения' : 'Создать рецепт'}
         </Button>
       </View>
     </ScrollView>

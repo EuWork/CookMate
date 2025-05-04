@@ -5,20 +5,21 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigators/types';
 import { styles } from '@/screens/FavRecipeScreen/components/FavRecipeCard/styles/FavRecipeCardStyles';
-import { FavReceiptsCardProps } from '@/screens/FavRecipeScreen/components/FavRecipeCard/types/FavReceiptsCardTypes';
+import { FavRecipesCardProps } from '@/screens/FavRecipeScreen/components/FavRecipeCard/types/FavRecipesCardTypes.ts';
 
-export default function FavRecipeCard({ recipe }: FavReceiptsCardProps) {
+
+export default function FavRecipeCard({ recipe }: FavRecipesCardProps) {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const { toggleFavorite, isFavorite } = useFavorites();
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ReceiptDetailScreen', { recipe })}
+      onPress={() => navigation.navigate('RecipeDetailScreen', { recipe })}
     >
       <View style={styles.cardComponent}>
         <Card.Cover
-          source={{ uri: recipe.image }}
+          source={{ uri: recipe.image! }}
           style={styles.imageReceipt}
         />
         <View>
