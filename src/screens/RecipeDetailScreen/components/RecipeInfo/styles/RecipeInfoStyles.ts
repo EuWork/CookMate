@@ -28,8 +28,8 @@ export const styles= StyleSheet.create({
   recipeInfo: {
     position: 'absolute',
     alignSelf: 'center',
-    width: 318,
-    height: 120,
+    width: 350,
+    height: 140,
     marginTop: 380,
     backgroundColor: '#ffffff',
     borderRadius: 20,
@@ -41,6 +41,8 @@ export const styles= StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     marginTop: 10,
+    flexWrap: 'wrap',
+    maxWidth: '100%',
   },
   recipeIngredients: {
     alignSelf: 'center',
@@ -60,4 +62,8 @@ export const styles= StyleSheet.create({
     fontFamily: 'Roboto',
     color: '#747474',
   },
+  map: {
+    width: 200,
+    height: 200,
+  }
 });

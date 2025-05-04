@@ -1,9 +1,12 @@
 export type RecipeTypes = {
-  id: string;
+  id: number;
   name: string;
   cookingTime: string;
   calories: string;
-  ingredients: any[];
-  steps: any[];
   image: string | null;
+  ingredients: Array<{ name: string; amount: string }>;
+  steps: string[];
+  createdAt?: string;
+  isFavorite?: boolean;
+  isExternal?: boolean;
 };

@@ -22,4 +22,29 @@ export const styles = StyleSheet.create({
     elevation: 5,
     marginHorizontal: 5,
   },
+  loadingContainer: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+  },
+  emptyContainer: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    color: 'gray',
+    textAlign: 'center',
+  },
 });

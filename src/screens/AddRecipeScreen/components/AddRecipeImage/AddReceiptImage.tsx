@@ -1,16 +1,16 @@
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import * as ImagePicker from 'expo-image-picker';
 import Divider from '@/utils/Divider/Divider';
 import RecipesInput from '@/screens/AddRecipeScreen/components/RecipeInput/RecipesInput';
 import { useCallback } from 'react';
 import { styles } from '@/screens/AddRecipeScreen/components/AddRecipeImage/styles/AddRecipeImageStyles';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 type AddReceiptImageProps = {
   image: string | null;
   name: string;
-  setImage: (image: string | null) => void;
-  setName: (name: string | null) => void;
+  setImage: (image: string ) => void;
+  setName: (name: string ) => void;
 };
 
 export default function AddReceiptImage({
@@ -19,21 +19,21 @@ export default function AddReceiptImage({
   setName,
 }: AddReceiptImageProps) {
   const pickImage = useCallback(async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Требуется разрешение на доступ к галерее');
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      quality: 1,
+      selectionLimit: 1,
+    });
+
+    if (result.didCancel) return;
+
+    if (result.errorCode) {
+      Alert.alert(`Ошибка: ${result.errorMessage}`);
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 1,
-      selectionLimit: 1,
-      mediaTypes: 'images',
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+    if (result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri!);
     }
   }, [setImage]);
 

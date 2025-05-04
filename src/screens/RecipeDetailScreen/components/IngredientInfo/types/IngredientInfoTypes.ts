@@ -1,6 +1,9 @@
 export type IngredientInfoProps = {
-  ingredients: Array<{
-    name: string;
-    amount: string;
-  }>;
+  ingredients: Ingredient[];
 };
+
+interface Ingredient {
+  name: string;
+  amount: string;
+  image?: string;
+}

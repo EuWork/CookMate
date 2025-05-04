@@ -4,8 +4,15 @@ import RecipeInfo from '@/screens/RecipeDetailScreen/components/RecipeInfo/Recip
 import IngredientInfo from '@/screens/RecipeDetailScreen/components/IngredientInfo/IngredientInfo';
 import StepsInfo from '@/screens/RecipeDetailScreen/components/StepsInfo/StepsInfo';
 import { styles } from './styles/RecipeDetailScreenStyles';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '@/navigators/types.ts';
 
-export default function RecipeDetailScreen({ route }) {
+type RecipeDetailScreenProp = RouteProp<RootStackParamList, 'RecipeDetailScreen'>
+
+export default function RecipeDetailScreen() {
+
+  const route = useRoute<RecipeDetailScreenProp>();
+
   const { recipe } = route.params;
 
   if (!recipe) {

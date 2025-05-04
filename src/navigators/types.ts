@@ -5,11 +5,13 @@ export type RootStackParamList = {
     newRecipe?: RecipeTypes;
     updatedRecipe?: RecipeTypes;
     deletedRecipeId?: string;
+    refresh?: boolean;
   };
   FavoriteReceiptsScreen: undefined;
-  ReceiptDetailScreen: { recipe: any };
+  RecipeDetailScreen: { recipe: any };
   AddRecipeScreen: {
     recipeToEdit?: RecipeTypes;
     isEditing?: boolean;
   };
+  MapScreen: undefined;
 };
